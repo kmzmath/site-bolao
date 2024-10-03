@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolão de Palpites - Arraste e Solte</title>
+    <style>
+        /* Definir imagem de fundo */
+        body {
+            background-image: url('images/fundo.png');
+            background-size: cover; /* Faz a imagem cobrir toda a tela */
+            background-position: center; /* Centraliza a imagem */
+            background-repeat: no-repeat; /* Impede que a imagem se repita */
+            background-attachment: fixed; /* Mantém a imagem fixa no fundo */
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            min-height: 100vh; /* Ocupa toda a altura da janela */
+            overflow: hidden; /* Impede rolagem */
+        }
+
+        /* Para que a página não role */
+        html, body {
+            height: 100%;
+        }
+
+        /* Container inicial para as logos, similar às dropzones */
+        .logo-container {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 2px solid #000;
+            border-radius: 15px;
+            width: auto;
+            max-width: 80%;
+            min-height: 200px; /* Garante altura mínima para parecer uma dropzone */
+        }
+
+        /* Para imagens das logos */
+        .logo {
+            width: 100px;
+            height: 100px;
+            cursor: grab;
+        }
+
+        /* Estilo para os quadrados (dropzones) */
+        .dropzone {
+            width: 150px;
+            height: 150px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            border: 2px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Reposicionar os dois slots extras */
+        .extra-slot-1 {
+            position: absolute;
+            top: 40%; /* Posição personalizada */
+            left: 15%; /* Alinhamento à esquerda */
+        }
+
+        .extra-slot-2 {
+            position: absolute;
+            top: 40%; /* Posição personalizada */
+            right: 15%; /* Alinhamento à direita */
+        }
+
+        /* Texto "3-0" e "0-3" */
+        .text-left {
+            position: absolute;
+            top: 45%;
+            left: 10%; /* Ajustar o alinhamento do texto "3-0" */
+            color: white;
+            font-size: 20px;
+        }
+
+        .text-right {
+            position: absolute;
+            top: 45%;
+            right: 10%; /* Ajustar o alinhamento do texto "0-3" */
+            color: white;
+            font-size: 20px;
+        }
+
+        /* Reposicionar e adicionar 7 quadrados de avanço */
+        .dropzone-container {
+            position: absolute;
+            top: 70%; /* Mover mais para baixo */
+            left: 50%;
+            transform: translateX(-50%);
+            display: grid;
+            grid-template-columns: repeat(7, 150px); /* Agora com 7 quadrados */
+            grid-gap: 20px;
+        }
+
+        /* Texto "Classificados" embaixo dos 7 slots */
+        .text-center {
+            position: absolute;
+            top: 90%; /* Ajustar a posição do texto "Classificados" */
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Botões de ação */
+        .button-container {
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            z-index: 10;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Botões para Confirmar e Resetar escolhas -->
+<div class="button-container">
+    <button id="confirmButton" class="button">Confirmar escolhas</button>
+    <button id="resetButton" class="button">Resetar escolhas</button>
+</div>
+
+<!-- Área das logos para arrastar -->
+<div id="logoContainer" class="logo-container" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+    <img src="images/azure_bears_golden.png" alt="Azure Bears Golden" class="logo" draggable="true" id="azure_bears_golden">
+    <img src="images/caap_hellhounds.png" alt="CAAP Hellhounds" class="logo" draggable="true" id="caap_hellhounds">
+    <img src="images/clerigos.png" alt="Clerigos" class="logo" draggable="true" id="clerigos">
+    <img src="images/fenixUFMG.png" alt="UFMG Fenix" class="logo" draggable="true" id="fenixUFMG">
+    <img src="images/furia.png" alt="FURIA" class="logo" draggable="true" id="FURIA">
+    <img src="images/macklogic.png" alt="MackLogic" class="logo" draggable="true" id="macklogic">
+    <img src="images/maua.png" alt="Maua Esports" class="logo" draggable="true" id="maua">
+    <img src="images/poli_plague.png" alt="Poli Plague" class="logo" draggable="true" id="poli_plague">
+    <img src="images/priestspuc.png" alt="PUC Priests" class="logo" draggable="true" id="priestspuc">
+    <img src="images/ufg_eagles_black.webp" alt="UFG Eagles Black" class="logo" draggable="true" id="ufg_eagles_black">
+    <img src="images/UFG_eagles.png" alt="UFG Eagles Blue" class="logo" draggable="true" id="UFG_eagles">
+    <img src="images/unb.png" alt="UNB Green Owls RED" class="logo" draggable="true" id="unb">
+    <img src="images/UNIFEI.png" alt="UNIFEI" class="logo" draggable="true" id="UNIFEI">
+    <img src="images/uninassau.png" alt="Uninassau" class="logo" draggable="true" id="uninassau">
+    <img src="images/usp_stars.png" alt="USP Stars" class="logo" draggable="true" id="usp_stars">
+</div>
+
+<!-- Slots adicionais (extra-slot-1 e extra-slot-2) -->
+<div class="dropzone extra-slot-1" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
+<div class="dropzone extra-slot-2" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
+
+<!-- Texto "3-0" e "0-3" ao lado dos slots -->
+<div class="text-left">3-0</div>
+<div class="text-right">0-3</div>
+
+<!-- Dropzones de avanço (7 quadrados agora) -->
+<div class="dropzone-container">
+    <div class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
+    <div class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
+    <div class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
+    <div class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
+    <div class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
+    <div class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
+    <div class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
+</div>
+
+<!-- Texto "Classificados" embaixo dos 7 slots -->
+<div class="text-center">Classificados</div>
+
+<!-- Inclusão de html2canvas e JavaScript de funcionalidade -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+    // Permitir que o item seja arrastado para cima de um dropzone ou container de logos
+    function allowDrop(event) {
+        event.preventDefault();
+        event.target.style.border = "2px dashed #fff";  // Estiliza a borda ao arrastar
+    }
+
+    // Função para retornar ao estado original quando o usuário sai da área de drop
+    function dragLeave(event) {
+        event.target.style.border = "2px solid #000"; // Volta à borda original
+    }
+
+    // Quando o arraste começa, associar a ID do item
+    document.querySelectorAll('.logo').forEach(logo => {
+        logo.addEventListener('dragstart', (event) => {
+            event.dataTransfer.setData("text", event.target.id);
+            event.dataTransfer.setData("origin", event.target.parentElement.id); // Salva o container de origem
+        });
+    });
+
+    // Função para realizar a lógica de drop
+    function drop(event) {
+        event.preventDefault();
+        const logoId = event.dataTransfer.getData("text");
+        const logo = document.getElementById(logoId);
+        const dropzone = event.target;
+
+        // Verificar se a dropzone já contém uma logo visível
+        if (dropzone.classList.contains('dropzone') && dropzone.children.length > 0) {
+            alert("Este espaço já está ocupado. Por favor, escolha outro.");
+            return;
+        }
+
+        // Inserir a nova logo na dropzone ou logo-container
+        if (dropzone.id === 'logoContainer') {
+            logo.style.width = "100px"; // Restaurar o tamanho original
+            logo.style.height = "100px";
+            dropzone.appendChild(logo); // Adicionar a logo de volta ao container
+        } else {
+            if (dropzone.classList.contains('dropzone')) {
+                dropzone.appendChild(logo);  // Adicionar a nova logo
+                logo.style.width = "100%";
+                logo.style.height = "100%";
+            }
+        }
+    }
+
+    // Função para resetar as escolhas (movendo logos de volta ao container original)
+    document.getElementById('resetButton').addEventListener('click', () => {
+        const logoContainer = document.getElementById('logoContainer');
+        document.querySelectorAll('.logo').forEach(logo => {
+            logo.style.width = "100px";
+            logo.style.height = "100px";
+            logoContainer.appendChild(logo);  // Mover logo de volta para o container original
+        });
+    });
+
+    // Função para confirmar as escolhas (tirar print screen)
+    document.getElementById('confirmButton').addEventListener('click', () => {
+        html2canvas(document.body).then(canvas => {
+            // Criar um link para download da imagem gerada
+            let link = document.createElement('a');
+            link.href = canvas.toDataURL("image/png");
+            link.download = 'bolao_escolhas.png';
+            link.click();
+        });
+    });
+</script>
+
+</body>
+</html>
